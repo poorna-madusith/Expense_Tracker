@@ -1,0 +1,58 @@
+@using Expense_Tracker.Models
+@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-8">        <div class="auth-widget">
+            <div class="auth-logo-section">
+                <img src="~/logo.png" alt="Expense Tracker Logo" class="auth-logo" />
+                <h3>Expense Tracker</h3>
+            </div>
+            <div class="auth-form-section">
+                <div class="text-center mb-4">
+                    <h2>Create a new account</h2>
+                </div>
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ConfirmPassword" class="control-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>                <div class="form-group mb-3 d-flex justify-content-center">
+                    <input type="submit" value="Register" class="btn btn-success w-50 py-2" />
+                </div>                <div class="text-center mt-4">
+                    <p class="auth-text">
+                        Already a member? 
+                        <a asp-action="Login" class="auth-link">Sign in here <i class="bi bi-arrow-right"></i></a>
+                    </p>
+                </div>            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

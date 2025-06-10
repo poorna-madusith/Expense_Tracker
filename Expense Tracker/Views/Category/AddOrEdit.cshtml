@@ -1,0 +1,57 @@
+﻿@model Expense_Tracker.Models.Category
+
+@{
+    ViewData["PageTitle"] = Model.CategoryId == 0 ? "Create a new category" : "Edit category";
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="widget p-5" style="background-color:#212b36">
+            <form asp-action="AddOrEdit" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="CategoryId" />
+                <div class="mb-4">
+                    <div class='e-btn-group custom-rbt-group'>
+                        <input type="radio" id="expense-type" asp-for="Type" value="Expense" checked="@(Model.Type == "Expense")" />
+                        <label class="e-btn" for="expense-type">Expense</label>
+                        <input type="radio" id="income-type" asp-for="Type" value="Income" checked="@(Model.Type == "Income")" />
+                        <label class="e-btn" for="income-type">Income</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <ejs-textbox id="title" ejs-for="Title"
+                                placeholder="Title" floatLabelType="Always"></ejs-textbox>
+                    <span asp-validation-for="Title" class="text-danger fs-6"></span>
+                </div>
+                <div class="mb-3">
+                    <ejs-textbox id="icon" ejs-for="Icon"
+                                placeholder="Icon" floatLabelType="Always"></ejs-textbox>
+                    
+                    <span asp-validation-for="Icon" class="text-danger fs-6"></span>
+                </div>
+                <ejs-button id="submit" type="submit" content="@(Model.CategoryId == 0 ? "Create" : "Update") Category" cssClass="e-success"></ejs-button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="widget h-100 d-flex justify-content-center align-items-center">
+            <i class="fa-solid fa-shapes fa-2xl"></i>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Add client-side validation
+        $(document).ready(function() {
+            $("form").on("submit", function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+}

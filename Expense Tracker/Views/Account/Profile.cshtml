@@ -1,0 +1,92 @@
+@using Expense_Tracker.Models
+@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        @if (TempData["StatusMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                @TempData["StatusMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <div class="widget p-5">
+            <div class="text-center mb-4">
+                <h2>Profile Settings</h2>
+            </div>
+            <form asp-action="Profile" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                  <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label">Name</label>
+                    <div class="input-with-icon">
+                        <input asp-for="Name" class="form-control" />
+                        <i class="icon fa-solid fa-user"></i>
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <div class="input-with-icon">
+                        <input asp-for="Email" class="form-control" readonly />
+                        <i class="icon fa-solid fa-envelope"></i>
+                    </div>
+                </div>                <div class="form-group mb-3">
+                    <label asp-for="OldPassword" class="control-label">Current Password</label>
+                    <div class="input-with-icon password-container">
+                        <input asp-for="OldPassword" type="password" class="form-control" />
+                        <i class="icon fa-solid fa-lock"></i>
+                        <i class="toggle-password fa-solid fa-eye" onclick="togglePassword(this)"></i>
+                    </div>
+                    <span asp-validation-for="OldPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="NewPassword" class="control-label">New Password</label>
+                    <div class="input-with-icon password-container">
+                        <input asp-for="NewPassword" type="password" class="form-control" />
+                        <i class="icon fa-solid fa-key"></i>
+                        <i class="toggle-password fa-solid fa-eye" onclick="togglePassword(this)"></i>
+                    </div>
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ConfirmNewPassword" class="control-label">Confirm New Password</label>
+                    <div class="input-with-icon password-container">
+                        <input asp-for="ConfirmNewPassword" type="password" class="form-control" />
+                        <i class="icon fa-solid fa-check-double"></i>
+                        <i class="toggle-password fa-solid fa-eye" onclick="togglePassword(this)"></i>
+                    </div>
+                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                </div><div class="form-group mt-4 mb-3 d-flex justify-content-center">
+                    <input type="submit" value="Save Changes" class="btn btn-success w-50 py-2" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function togglePassword(element) {
+            const input = element.parentElement.querySelector('input');
+            const type = input.getAttribute('type');
+            
+            if (type === 'password') {
+                input.setAttribute('type', 'text');
+                element.classList.remove('fa-eye');
+                element.classList.add('fa-eye-slash');
+            } else {
+                input.setAttribute('type', 'password');
+                element.classList.remove('fa-eye-slash');
+                element.classList.add('fa-eye');
+            }
+        }
+    </script>
+}

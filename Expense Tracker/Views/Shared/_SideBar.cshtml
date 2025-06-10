@@ -1,0 +1,138 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<Object> menuItems = new List<Object>();
+
+    menuItems.Add(new
+    {
+        text = "General",
+        separator = true,
+    });
+    menuItems.Add(new
+    {
+        text = "Dashboard",
+        url = "/",
+        iconCss = "fa-solid fa-box",
+    });
+    menuItems.Add(new
+    {
+        text = "Categories",
+        url = "/Category",
+        iconCss = "fa-solid fa-folder-closed",
+    });
+    menuItems.Add(new
+    {
+        text = "Transactions",
+        iconCss = "fa-solid fa-arrow-right-arrow-left",
+        url = "/Transaction"
+    });
+
+    // Account section
+    menuItems.Add(new
+    {
+        text = "Account",
+        separator = true,
+    });
+    menuItems.Add(new
+    {
+        text = "Profile",
+        iconCss = "fa-solid fa-user",
+        url = "/Account/Profile"
+    });
+    menuItems.Add(new
+    {
+        text = "Logout",
+        iconCss = "fa-solid fa-sign-out-alt",
+        url = "#",
+        id = "logout-button"
+    });
+}
+
+
+<ejs-sidebar id="sidebar" width="290px" enableDock dockSize="100px"
+            target=".dock-target" enableGestures="false" position="Left" showBackdrop="false">
+    <e-content-template>
+        <div class="sidebar-header">
+            <div class="p-3">
+                <div class="text-end mb-3">
+                    <button id="sidebar-toggler" class="btn btn-transparent">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="d-flex align-items-center">
+                    <img src="~/logo.png" alt="Expense Tracker Logo" />
+                    <h4>Expense Tracker</h4>
+                </div>
+            </div>
+        </div>
+        @foreach (var item in menuItems)
+        {
+            var propSeparator = item.GetType().GetProperty("separator");
+            var separatorValue = propSeparator?.GetValue(item);
+            if (separatorValue != null && (bool)separatorValue)
+            {
+                <div class="separator">
+                    @item.GetType().GetProperty("text")?.GetValue(item)
+                </div>
+            }
+            else
+            {
+                var url = item.GetType().GetProperty("url")?.GetValue(item)?.ToString() ?? "#";
+                var text = item.GetType().GetProperty("text")?.GetValue(item)?.ToString() ?? "";
+                var iconCss = item.GetType().GetProperty("iconCss")?.GetValue(item)?.ToString() ?? "";
+                var id = item.GetType().GetProperty("id")?.GetValue(item)?.ToString();
+
+                if (text == "Logout")
+                {
+                    <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                        <div class="sidebar-item" id="@id">
+                            <i class="@iconCss"></i>
+                            <span>@text</span>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <a class="sidebar-item" href="@url">
+                        <i class="@iconCss"></i>
+                        <span>@text</span>
+                    </a>
+                }
+            }
+        }
+    </e-content-template>
+</ejs-sidebar>
+
+<script>
+    document.addEventListener('DOMContentLoaded',function (){
+        const sidebar = document.getElementById('sidebar');
+        const dockBar = sidebar.ej2_instances[0];
+        const dockTarget = document.querySelector('.dock-target');
+        
+        document.getElementById('sidebar-toggler').onclick = function () {
+            dockBar.toggle();
+            if (sidebar.classList.contains('e-close')) {
+                dockTarget.classList.add('sidebar-mini');
+            } else {
+                dockTarget.classList.remove('sidebar-mini');
+            }
+        };
+
+        // Add event listener for sidebar state changes
+        sidebar.addEventListener('stateChange', function (e) {
+            if (e.detail.state === 'Collapsed') {
+                dockTarget.classList.add('sidebar-mini');
+            } else {
+                dockTarget.classList.remove('sidebar-mini');
+            }
+        });
+
+        const logoutButton = document.getElementById('logout-button');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function () {
+                document.getElementById('logoutForm').submit();
+            });
+        }
+    });
+</script>
